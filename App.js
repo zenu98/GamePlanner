@@ -1,20 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, StatusBar } from "react-native";
+import GameList from "./screens/GameList";
+import GameDetail from "./screens/GameDetail";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import GameCalendar from "./screens/GameCalendar";
+import AuthScreen from "./screens/AuthScreen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <SafeAreaView style={styles.root}>
+          <StatusBar />
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="GameList" component={GameList} />
+              <Stack.Screen name="GameDetail" component={GameDetail} />
+              <Stack.Screen name="GameCalendar" component={GameCalendar} />
+              <Stack.Screen name="AuthScreen" component={AuthScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+      </Provider>
+    </QueryClientProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  container: {
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
