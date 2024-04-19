@@ -7,19 +7,6 @@ import "dayjs/locale/ko";
 import NavigationBar from "../components/NavigationBar";
 import { useSelector } from "react-redux";
 
-// const eventsss = [
-//   {
-//     title: "세키로 어쩌구저쩌구 머시기",
-//     start: dayjs("2024-02-4").set("hour", 10).set("minute", 0).toDate(),
-//     end: dayjs("2024-02-4").set("hour", 10).set("minute", 0).toDate(),
-//   },
-//   {
-//     title: "철권8",
-//     start: dayjs("2024-02-8").toDate(),
-//     end: dayjs("2024-02-9").toDate(),
-//   },
-// ];
-
 const CalendarData = () => {
   const gameListData = useSelector((state) => state.gameData.datas);
   const selectedPlatform = useSelector((state) => state.filteredGames.platform);

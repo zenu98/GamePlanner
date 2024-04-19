@@ -1,56 +1,73 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-const Login = () => {
+import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithCredential,
+} from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
+WebBrowser.maybeCompleteAuthSession();
+
+const Login = ({ navigation }) => {
+  const [userInfo, setUserInfo] = useState();
+  const [req, res, promptAsync] = Google.useAuthRequest({
+    androidClientId:
+      "639578192138-d66e30vj9eig9jte5938o9qnot9aoncc.apps.googleusercontent.com",
+  });
+  const checkLocalUser = async () => {
+    try {
+      const userJSON = await AsyncStorage.getItem("@user");
+      const userData = userJSON ? JSON.parse(userJSON) : null;
+      setUserInfo(userData);
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+  useEffect(() => {
+    if (res?.type == "success") {
+      const { id_token } = res.params;
+      const credential = GoogleAuthProvider.credential(id_token);
+      signInWithCredential(auth, credential);
+    }
+  }, [res]);
+  useEffect(() => {
+    checkLocalUser();
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // console.log(JSON.stringify(user, null, 2));
+        setUserInfo(user);
+        await AsyncStorage.setItem("@user", JSON.stringify(user));
+      } else {
+        console.log("else");
+      }
+    });
+    return () => unsub();
+  }, []);
+
   return (
-    <View style={styles.auth_contents_bottom}>
-      <View
-        style={{
-          flex: 0.6,
-
-          justifyContent: "center",
-        }}
-      >
-        <View style={styles.input_container}>
-          <TextInput style={styles.input_id} />
-
-          <TextInput style={styles.input_password} />
-        </View>
+    <Pressable
+      style={{ paddingVertical: 15 }}
+      // onPress={() => navigation.navigate("SignInScreen")}
+    >
+      <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+        <Ionicons name="exit-outline" size={22} color={"#3D3D3D"} />
+        <Text
+          style={{
+            fontSize: 15,
+            color: "#3D3D3D",
+            marginLeft: 6,
+          }}
+        >
+          로그인
+        </Text>
       </View>
-      <View style={styles.login_container}>
-        <Pressable>
-          <Text>로그인</Text>
-        </Pressable>
-      </View>
-    </View>
+    </Pressable>
   );
 };
 
 export default Login;
-
-const styles = StyleSheet.create({
-  auth_contents_bottom: {
-    flex: 5,
-    justifyContent: "center",
-  },
-  input_container: {
-    margin: 15,
-    borderWidth: 1,
-    borderRadius: 5,
-    overflow: "hidden",
-  },
-  input_id: {
-    height: 40,
-    borderBottomWidth: 1,
-    padding: 8,
-  },
-  input_password: {
-    height: 40,
-    padding: 8,
-  },
-  login_container: {
-    flex: 0.4,
-    margin: 15,
-    borderWidth: 0.5,
-    borderRadius: 7,
-  },
-});

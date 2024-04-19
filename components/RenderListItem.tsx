@@ -2,16 +2,13 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
   Pressable,
-  SectionList,
-  Image,
   ImageBackground,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 function renderListItem({ item, navigation }) {
-  const { title, image } = item;
+  const { name, cover } = item;
 
   const pressHandler = () => {
     navigation.navigate("GameDetail", {
@@ -24,11 +21,13 @@ function renderListItem({ item, navigation }) {
         <View style={styles.imageContainer}>
           <ImageBackground
             source={
-              image !== ""
+              cover === null
                 ? {
-                    uri: image,
+                    uri: "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg",
                   }
-                : null
+                : {
+                    uri: `https://images.igdb.com/igdb/image/upload/t_cover_big/${cover}.jpg`,
+                  }
             }
             style={styles.image}
             onError={({ nativeEvent: { error } }) => console.warn(error)}
@@ -45,12 +44,12 @@ function renderListItem({ item, navigation }) {
                 numberOfLines={1}
                 style={{
                   margin: 1,
-                  fontWeight: 700,
+                  fontWeight: "600",
                   fontSize: 18,
                   color: "white",
                 }}
               >
-                {title}
+                {name}
               </Text>
             </LinearGradient>
           </ImageBackground>

@@ -1,33 +1,42 @@
-interface GameInfo {
-  title: string;
-  category: Category[];
-  image?: string;
-  publisher: string;
-  developer: string;
-  video?: string;
-  date?: string;
-}
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { CompositeScreenProps } from "@react-navigation/native";
+import type { DrawerScreenProps } from "@react-navigation/drawer";
 
-export interface Category {
-  text: string;
+export interface Genre {
+  id: number;
   genre: string;
 }
 export interface PlatForm {
   platform: string[];
 }
+export type RootStackParamList = {
+  GameList: undefined;
+  GameDetail: { selectedGame: SelectedGame };
+  SignUpScreen: undefined;
+  SignInScreen: undefined;
+};
 
-interface GamesOfMonth {
-  date: string;
-  games: Record<string, GameInfo>;
-}
+type SelectedGame = {
+  cover: string;
+  first_release_date: string;
+  genres: string[];
+  id: number;
+  name: string;
+  platforms: string[];
+  screenshots: string[];
+  videos: string[];
+};
+export type DrawerParamList = {
+  Home: undefined;
+  GameCalendar: undefined;
+  MyGames: undefined;
+};
+export type GameListScreenProps = CompositeScreenProps<
+  DrawerScreenProps<DrawerParamList, "Home">,
+  NativeStackScreenProps<RootStackParamList>
+>;
 
-interface GameModel {
-  [monthId: string]: GamesOfMonth;
-}
-
-export interface List {
-  PC: GameModel;
-  XBOX: GameModel;
-  PS5: GameModel;
-  Switch: GameModel;
-}
+export type GameDetailScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "GameDetail"
+>;

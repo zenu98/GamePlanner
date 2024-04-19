@@ -1,36 +1,37 @@
 {
   "expo": {
-    "name": "gameplanner",
+    "name": "게임플래너",
     "slug": "gameplanner",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "scheme": "gameplanner",
+    "icon": "./assets/gameplanner-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/gameplanner-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#6183f2"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/gameplanner-logo.png",
+        "backgroundColor": "#6183f2"
       },
       "package": "com.project.gameplanner"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/gameplanner-logo.png"
     },
     "extra": {
       "eas": {
         "projectId": "8a0def30-d202-4146-8978-25119dfbf5c2"
       }
-    }
+    },
+    "plugins": ["expo-font"]
   }
 }

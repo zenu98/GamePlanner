@@ -1,17 +1,33 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
+import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import Header from "./Header";
-import { useDispatch, useSelector } from "react-redux";
-import { filterPlatform } from "../store/types";
+import { filterPlatform, setPlatform } from "../store/types";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
+import { selectPlatform } from "../store/gameData";
+import { currentPlatform } from "../store/types";
+const { width } = Dimensions.get("window");
 function NavigationBar({ navigation }) {
-  const platformList = useSelector(
-    (state) => state.gameData.platforms.platform
-  );
-  const selectedPlatform = useSelector((state) => state.filteredGames.platform);
-  console.log(selectedPlatform);
-  const dispatch = useDispatch();
+  const platformList = useAppSelector(selectPlatform);
+  const selectedPlatform = useAppSelector(currentPlatform);
+
+  const dispatch = useAppDispatch();
   const pressHandler = (key) => {
+    let platformType;
+    switch (key) {
+      case "PC":
+        platformType = "PC (Microsoft Windows)";
+        break;
+      case "XBOX":
+        platformType = "Xbox Series X|S";
+        break;
+      case "PS5":
+        platformType = "PlayStation 5";
+        break;
+      case "Switch":
+        platformType = "Nintendo Switch";
+        break;
+    }
     dispatch(filterPlatform({ platform: key }));
+    dispatch(setPlatform({ platformType: platformType }));
   };
 
   return (
@@ -30,7 +46,9 @@ function NavigationBar({ navigation }) {
             >
               <Text
                 style={[
-                  styles.platform_btn_text,
+                  width < 450
+                    ? styles.platform_btn_text_phone
+                    : styles.platform_btn_text_tablet,
                   selectedPlatform === item && styles.platform_btn_text_pressed,
                 ]}
               >
@@ -45,7 +63,7 @@ function NavigationBar({ navigation }) {
 }
 
 export default NavigationBar;
-
+const deviceWidth = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   navContainer: {
     flex: 2,
@@ -56,8 +74,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    backgroundColor: "#F6F6F6",
-    borderColor: "#E4E4E4",
+    backgroundColor: "#f7f8fe",
+    borderColor: "#eff2fd",
 
     borderBottomWidth: 1,
   },
@@ -70,15 +88,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   platform_btn_pressed: {
-    borderBottomColor: "black",
+    borderBottomColor: "#5775d9",
     borderBottomWidth: 1,
   },
-  platform_btn_text: {
-    color: "#5D5D5D",
+  platform_btn_text_phone: {
+    color: "#263460",
     fontSize: 16,
   },
+  platform_btn_text_tablet: {
+    color: "#263460",
+    fontSize: 24,
+  },
   platform_btn_text_pressed: {
-    color: "#070707",
+    color: "#5775d9",
 
     fontWeight: "bold",
   },

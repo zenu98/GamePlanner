@@ -7,16 +7,19 @@ import {
   ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { filterGames, setModal } from "../store/types";
+import { filterGenre, setModal } from "../store/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 
 const TagModal = () => {
-  const gameType = useSelector((state) => state.filteredGames.type);
+  const gameType = useSelector((state) => state.filteredGames.genre);
+
   const [seletedTag, setSelectedTag] = useState(gameType);
-  const categoryList = useSelector((state) => state.gameData.category);
-  const sortedCategoryList = [...categoryList].sort(
-    (a, b) => a.text.length - b.text.length
+
+  const genreList = useSelector((state) => state.gameData.genres);
+
+  const sortedGenreList = [...genreList].sort(
+    (a, b) => a.genre.length - b.genre.length
   );
 
   const dispatch = useDispatch();
@@ -28,7 +31,7 @@ const TagModal = () => {
     setSelectedTag(tag);
   };
   const searchHandler = () => {
-    dispatch(filterGames({ type: seletedTag }));
+    dispatch(filterGenre({ genre: seletedTag }));
     modalHandler();
   };
   return (
@@ -53,9 +56,9 @@ const TagModal = () => {
               style={styles.modal_inner_tagList_container}
               contentContainerStyle={{ flexDirection: "row", flexWrap: "wrap" }}
             >
-              {sortedCategoryList.map((item) => (
+              {sortedGenreList.map((item) => (
                 <Pressable
-                  key={item.genre}
+                  key={item.id}
                   style={[
                     styles.modal_inner_tagList_contents,
                     seletedTag === item.genre &&
@@ -72,7 +75,7 @@ const TagModal = () => {
                         styles.modal_inner_tagList_contents_text_pressed,
                     ]}
                   >
-                    {item.text}
+                    {item.genre}
                   </Text>
                 </Pressable>
               ))}
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
     borderColor: "#8C8C8C",
   },
   modal_inner_tagList_contents_pressed: {
-    backgroundColor: "#3d82c0",
+    backgroundColor: "#6183F2",
     borderColor: "white",
   },
   modal_inner_tagList_contents_text: {
@@ -156,7 +159,7 @@ const styles = StyleSheet.create({
     flex: 0.4,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#0067a3",
+    backgroundColor: "#6183F2",
   },
 
   modal_inner_button_font: {

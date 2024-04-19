@@ -1,18 +1,24 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-
+import {
+  getAuth,
+  initializeAuth,
+  getReactNativePersistence,
+} from "firebase/auth";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 const firebaseConfig = {
-  apiKey: "AIzaSyDbrzOYIW4-wQ-RZyklg6B33o-IhjWZX5I",
-  authDomain: "gameplanner-cc9b6.firebaseapp.com",
-  projectId: "gameplanner-cc9b6",
-  storageBucket: "gameplanner-cc9b6.appspot.com",
-  messagingSenderId: "586655624733",
-  appId: "1:586655624733:web:0ededd212525b372b1e0f4",
-  measurementId: "G-2QJ16C5F3Z",
+  apiKey: process.env.EXPO_PUBLIC_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_MESSAGIN_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_APP_ID,
+  measurementId: process.env.EXPO_PUBLIC_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auths = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
 export const auth = getAuth(app);
-
-// Android: 639578192138-d66e30vj9eig9jte5938o9qnot9aoncc.apps.googleusercontent.com
+export { app, auths };

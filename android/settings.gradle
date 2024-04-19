@@ -1,4 +1,4 @@
-rootProject.name = 'gameplanner'
+rootProject.name = '게임플래너'
 
 dependencyResolutionManagement {
   versionCatalogs {

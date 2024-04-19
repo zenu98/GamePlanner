@@ -9,14 +9,15 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { filterGames, setModal } from "../store/types";
-const TypeListScroll = () => {
-  const gameType = useSelector((state) => state.filteredGames.type);
-  const categoryList = useSelector((state) => state.gameData.category);
+import { filterGenre, setModal } from "../store/types";
+
+const GenreList = () => {
+  const gameType = useSelector((state) => state.filteredGames.genre);
+  const genreList = useSelector((state) => state.gameData.genres);
   const dispatch = useDispatch();
 
-  const pressHandler = (key) => {
-    dispatch(filterGames({ type: key }));
+  const pressHandler = (key, index) => {
+    dispatch(filterGenre({ genre: key }));
   };
   const modalHandler = () => {
     dispatch(setModal());
@@ -33,30 +34,36 @@ const TypeListScroll = () => {
         <AntDesign
           name="search1"
           size={24}
-          color="black"
+          color="#263460"
           style={{
             transform: [{ scaleX: -1 }],
           }}
         />
       </Pressable>
-      <Text style={{ marginRight: 5 }}>|</Text>
+      <Text style={{ marginRight: 5, color: "#263460" }}>|</Text>
       <ScrollView
         contentContainerStyle={styles.menuContainer_title}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {categoryList.map((item) => (
+        {genreList.map((item, index) => (
           <Pressable
-            onPress={() => pressHandler(item.genre)}
-            key={item.genre}
+            onPress={() => pressHandler(item.genre, index)}
+            key={item.id}
             style={[
               styles.type_container,
               gameType === item.genre && styles.type_container_pressed,
             ]}
           >
             <View>
-              <Text style={gameType === item.genre && { color: "white" }}>
-                {item.text}
+              <Text
+                style={
+                  gameType === item.genre
+                    ? { color: "white" }
+                    : { color: "#090d18" }
+                }
+              >
+                {item.genre}
               </Text>
             </View>
           </Pressable>
@@ -66,7 +73,7 @@ const TypeListScroll = () => {
   );
 };
 
-export default TypeListScroll;
+export default GenreList;
 
 const deviceWidth = Dimensions.get("window").height;
 
@@ -74,11 +81,11 @@ const styles = StyleSheet.create({
   all_container: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "white",
+    backgroundColor: "#fdfdfe",
     alignItems: "center",
 
     borderBottomWidth: 1,
-    borderColor: "#D2D2D2",
+    borderColor: "#eff2fd",
   },
   menuContainer_title: {
     height: 50,
@@ -94,11 +101,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   type_container_pressed: {
-    backgroundColor: "#212121",
+    backgroundColor: "#6183F2",
   },
   tagText: {
     borderRightWidth: 1,
     paddingRight: 10,
-    borderColor: "#D2D2D2",
+    borderColor: "#90a8f5",
   },
 });
